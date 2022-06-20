@@ -11,10 +11,14 @@ const VOLUME_KEY = '5. volume';
 const FORMAT_DATE = 'YYYY-MM-DD';
 
 export class StocksEntity {
+  public getRecentDate(object: any): string {
+    const keys = Object.keys(object);
+  
+    return keys[0];
+  }
+
   public normalizeQuote(response: any): any {
-    const recentDate = moment(new Date())
-      .subtract(1, 'days')
-      .format(FORMAT_DATE);
+    const recentDate = this.getRecentDate(response[PRICES_INFO_KEY]);
 
     const stockNormalized = {
       name: response[STOCK_INFO_KEY][STOCK_NAME_KEY],
