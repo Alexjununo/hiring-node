@@ -51,7 +51,7 @@ export const expectedCompare = {
 export const expectedGains = {
   name: 'AAPL',
   lastPrice: 123.45,
-  priceAtDate: 100,
+  pricedAtDate: 100,
   purchasedAmount: 100,
   purchasedAt: '2022-01-01',
   capitalGains: 100,

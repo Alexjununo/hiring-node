@@ -14,6 +14,8 @@ import {
 } from './dto/StocksResponseDto';
 import { StocksService } from './stocks.service';
 
+const CONFLICT_ERROR_CODE = 409;
+
 @ApiTags('stocks')
 @Controller('stocks')
 export class StocksController {
@@ -28,7 +30,7 @@ export class StocksController {
 
       return quote;
     } catch (error) {
-      if (error.code === 409) {
+      if (error.code === CONFLICT_ERROR_CODE) {
         throw new ConflictException(error.message);
       }
       throw new Error(error);
@@ -48,7 +50,7 @@ export class StocksController {
 
       return history;
     } catch (error) {
-      if (error.code === 409) {
+      if (error.code === CONFLICT_ERROR_CODE) {
         throw new ConflictException(error.message);
       }
       throw new Error(error);
@@ -62,7 +64,7 @@ export class StocksController {
     @Param('name') name: string,
     @Query('purchaseAtTxt') purchaseAtTxt?: string,
     @Query('amount') amount?: number,
-  ) {
+  ): Promise<GainsResponseDto> {
     try {
       const gains = await this.stocksService.getGains(
         name,
@@ -72,7 +74,7 @@ export class StocksController {
 
       return gains;
     } catch (error) {
-      if (error.code === 409) {
+      if (error.code === CONFLICT_ERROR_CODE) {
         throw new ConflictException(error.message);
       }
       throw new Error(error);
@@ -94,7 +96,7 @@ export class StocksController {
 
       return comparison;
     } catch (error) {
-      if (error.code === 409) {
+      if (error.code === CONFLICT_ERROR_CODE) {
         throw new ConflictException(error.message);
       }
       throw new Error(error);

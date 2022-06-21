@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { AlphaVantageAPI } from '../client/alpha.client';
+import {
+  CompareResponseDto,
+  GainsResponseDto,
+  HistoryResponseDto,
+  QuoteResponseDto,
+} from './dto/StocksResponseDto';
 import { StocksEntity } from './entities/stocks.entity';
-
-// create stock gains mock
-const gainsMock = {
-  name: 'AAPL',
-  lastPrice: 123.45,
-  priceAtDate: 100,
-  purchasedAmount: 100,
-  purchasedAt: '2022-01-01',
-  capitalGains: -100,
-};
 
 @Injectable()
 export class StocksService {
@@ -19,7 +15,7 @@ export class StocksService {
     protected stockEntity: StocksEntity,
   ) {}
 
-  async getQuote(name: string) {
+  async getQuote(name: string): Promise<QuoteResponseDto> {
     try {
       const quote = await this.alphaClient.fetchStockByName(name);
 
@@ -29,7 +25,11 @@ export class StocksService {
     }
   }
 
-  async getHistory(name: string, from: string, to: string) {
+  async getHistory(
+    name: string,
+    from: string,
+    to: string,
+  ): Promise<HistoryResponseDto> {
     try {
       const history = await this.alphaClient.fetchStockByName(name);
 
@@ -39,17 +39,24 @@ export class StocksService {
     }
   }
 
-  async getGains(name: string, purchaseAtTxt: string, amount: number) {
+  async getGains(
+    name: string,
+    purchaseAtTxt: string,
+    amount: number,
+  ): Promise<GainsResponseDto> {
     try {
       const gains = await this.alphaClient.fetchStockByName(name);
 
-      return gainsMock;
+      return this.stockEntity.normalizeGains(gains, purchaseAtTxt, amount);
     } catch (error) {
       throw error;
     }
   }
 
-  async getCompare(name: string, stocksToCompare: string[]) {
+  async getCompare(
+    name: string,
+    stocksToCompare: string[],
+  ): Promise<CompareResponseDto> {
     try {
       const lastPrices = [];
 

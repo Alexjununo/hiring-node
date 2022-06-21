@@ -6,9 +6,13 @@ require('dotenv').config({
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { MyLogger } from './utils/logger/logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, {
+    cors: true,
+    logger: new MyLogger(),
+  });
   const config = new DocumentBuilder()
     .setTitle('Stocks API')
     .setDescription('The Stocks API description')
